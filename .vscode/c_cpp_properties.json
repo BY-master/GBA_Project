@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "GBA",
+            "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/src",
+                "C:/devkitPro/butano/common/include",
+                "C:/devkitPro/butano/common/src",
+                "${workspaceFolder}/build",
+                "C:/devkitPro/butano/butano/include",
+                "C:/devkitPro/devkitARM/arm-none-eabi/include",
+                "C:/devkitPro/devkitARM/lib/gcc/arm-none-eabi/*/include",
+                "C:/devkitPro/devkitARM/lib/gcc/arm-none-eabi/*/include-fixed"
+            ],
+            "defines": [
+                "BN_CFG_AUDIO_MAX_MUSIC_CHANNELS=8",
+                "BN_CFG_AUDIO_MAX_SOUND_CHANNELS=12"
+            ],
+            "compilerPath": "C:/devkitPro/devkitARM/bin/arm-none-eabi-g++.exe",
+            "intelliSenseMode": "gcc-arm",
+            "cppStandard": "c++20",
+            "cStandard": "c17"
+        }
+    ],
+    "version": 4
+}

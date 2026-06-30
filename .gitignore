@@ -1,0 +1,14 @@
+# Butano / GBA build artifacts
+build/
+*.elf
+*.gba
+*.sav
+*.map
+
+# Object and dependency files
+*.o
+*.d
+
+# Common editor/system files
+.DS_Store
+Thumbs.db
