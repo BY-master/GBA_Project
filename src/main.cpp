@@ -13,6 +13,7 @@
 #include "bn_regular_bg_map_cell_info.h"
 #include "bn_camera_actions.h"
 #include "bn_music_actions.h"
+#include "bn_display.h"
 #include "bn_sprite_text_generator.h"
 #include "bn_sprites_mosaic_actions.h"
 #include "bn_bgs_mosaic_actions.h"
@@ -679,6 +680,64 @@ namespace
 
         bn::bgs_mosaic::set_stretch(0);
     }
+
+    void sprites_mosaic_actions_scene()
+    {
+        bn::sprite_ptr blonde_sprite = bn::sprite_items::blonde.create_sprite(0, 0);
+        blonde_sprite.set_mosaic_enabled(true);
+
+        bn::sprites_mosaic_stretch_loop_action action(120, 1);
+
+        while(!bn::keypad::start_pressed())
+        {
+            action.update();
+            bn::core::update();
+        }
+
+        bn::sprites_mosaic::set_stretch(0);
+    }
+
+    void bgs_mosaic_actions_scene()
+    {
+        bn::regular_bg_ptr land_bg = bn::regular_bg_items::land_2.create_bg(0, 0);
+        land_bg.set_mosaic_enabled(true);
+
+        bn::bgs_mosaic_horizontal_stretch_loop_action action(120, 1);
+
+        while(!bn::keypad::start_pressed())
+        {
+            action.update();
+            bn::core::update();
+        }
+
+        bn::bgs_mosaic::set_stretch(0);
+    }
+
+    void mosaic_hbe_scene()
+    {
+        bn::regular_bg_ptr land_bg = bn::regular_bg_items::land_2.create_bg(0, 0);
+        land_bg.set_mosaic_enabled(true);
+
+        bn::sprite_ptr blonde_sprite = bn::sprite_items::blonde.create_sprite(0, 0);
+        blonde_sprite.set_mosaic_enabled(true);
+
+        bn::array<bn::mosaic_attributes, bn::display::height()> mosaic_attributes;
+        bn::fixed max_stretch(0.5);
+
+        for(int index = 0, amplitude = 32; index < amplitude; ++index)
+        {
+            bn::fixed stretch = max_stretch - ((index * max_stretch) / amplitude);
+            mosaic_attributes[(bn::display::height() / 2) + index].set_horizontal_stretch(stretch);
+            mosaic_attributes[(bn::display::height() / 2) - index - 2].set_horizontal_stretch(stretch);
+        }
+        
+        bn::mosaic_attributes_hbe_ptr mosaic_attributes_hbe = bn::mosaic_attributes_hbe_ptr::create(mosaic_attributes);
+
+        while(!bn::keypad::start_pressed())
+        {
+            bn::core::update();
+        }
+    }
 }
 
 int main()
@@ -712,6 +771,15 @@ int main()
         bn::core::update();
 
         bgs_mosaic_scene();
+        bn::core::update();
+
+        sprites_mosaic_actions_scene();
+        bn::core::update();
+
+        bgs_mosaic_actions_scene();
+        bn::core::update();
+
+        mosaic_hbe_scene();
         bn::core::update();
     }
 }
