@@ -16,6 +16,8 @@
 #include "bn_display.h"
 #include "bn_sprite_text_generator.h"
 #include "bn_sprites_mosaic_actions.h"
+#include "bn_sprite_palette_actions.h"
+#include "bn_sprite_palettes_actions.h"
 #include "bn_bgs_mosaic_actions.h"
 #include "bn_mosaic_attributes.h"
 #include "bn_mosaic_attributes_hbe_ptr.h"
@@ -23,6 +25,8 @@
 #include "bn_sprite_items_cursor.h"
 #include "bn_sprite_items_dog.h"
 #include "bn_sprite_items_blonde.h"
+#include "bn_sprite_items_cavegirl.h"
+#include "bn_sprite_palette_items_cavegirl_alt.h"
 #include "bn_affine_bg_items_red.h"
 #include "bn_affine_bg_tiles_items_tiles.h"
 #include "bn_regular_bg_items_land.h"
@@ -738,6 +742,32 @@ namespace
             bn::core::update();
         }
     }
+
+    void palette_swap_scene()
+    {
+        bn::sprite_ptr cavegirl_sprite = bn::sprite_items::cavegirl.create_sprite(0, 0);
+        const bn::sprite_palette_item& palette_item = bn::sprite_items::cavegirl.palette_item();
+        const bn::sprite_palette_item& alt_palette_item = bn::sprite_palette_items::cavegirl_alt;
+        bn::sprite_palette_ptr cavegirl_palette = cavegirl_sprite.palette();
+        cavegirl_palette.set_colors(alt_palette_item);
+
+        while(!bn::keypad::start_pressed())
+        {
+            if(bn::keypad::a_pressed())
+            {
+                if(cavegirl_palette.colors() == palette_item.colors_ref())
+                {
+                    cavegirl_palette.set_colors(alt_palette_item);
+                }
+                else
+                {
+                    cavegirl_palette.set_colors(palette_item);
+                }
+            }
+
+            bn::core::update();
+        }
+    }
 }
 
 int main()
@@ -780,6 +810,9 @@ int main()
         bn::core::update();
 
         mosaic_hbe_scene();
+        bn::core::update();
+
+        palette_swap_scene();
         bn::core::update();
     }
 }

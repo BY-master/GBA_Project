@@ -22,3 +22,7 @@ After compiling, run the generated ROM:
 ```powershell
 .\GBA_Project.gba
 ```
+
+## Notes
+
+- [调色板笔记](docs/palette_notes.md)
