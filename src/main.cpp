@@ -14,6 +14,8 @@
 #include "bn_camera_actions.h"
 #include "bn_music_actions.h"
 #include "bn_display.h"
+#include "bn_bg_palette_actions.h"
+#include "bn_bg_palettes_actions.h"
 #include "bn_sprite_text_generator.h"
 #include "bn_sprites_mosaic_actions.h"
 #include "bn_sprite_palette_actions.h"
@@ -33,6 +35,7 @@
 #include "bn_regular_bg_items_land_2.h"
 #include "bn_regular_bg_tiles_items_tiles_2.h"
 #include "bn_regular_bg_items_map.h"
+#include "bn_regular_bg_items_village.h"
 #include "bn_bg_palette_items_palette.h"
 #include "bn_bg_palette_items_palette_2.h"
 // audio
@@ -768,6 +771,72 @@ namespace
             bn::core::update();
         }
     }
+
+    void inverted_palette_scene()
+    {
+        bn::sprite_ptr cavegirl_sprite = bn::sprite_items::cavegirl.create_sprite(0, 0);
+        bn::sprite_palette_ptr cavegirl_palette = cavegirl_sprite.palette();
+        cavegirl_palette.set_inverted(true);
+
+        while(!bn::keypad::start_pressed())
+        {
+            if(bn::keypad::a_pressed())
+            {
+                cavegirl_palette.set_inverted(!cavegirl_palette.inverted());
+            }
+
+            bn::core::update();
+        }
+    }
+
+    void inverted_palette_actions_scene()
+    {
+        bn::regular_bg_ptr village_bg = bn::regular_bg_items::village.create_bg(0, 0);
+        bn::bg_palette_ptr village_palette = village_bg.palette();
+        bn::bg_palette_inverted_toggle_action invert_action(village_palette, 60);
+
+        while(!bn::keypad::start_pressed())
+        {
+            invert_action.update();
+            bn::core::update();
+        }
+    }
+
+    void palette_grayscale_scene()
+    {
+        bn::sprite_ptr cavegirl_sprite = bn::sprite_items::cavegirl.create_sprite(0, 0);
+        bn::sprite_palette_ptr cavegirl_palette = cavegirl_sprite.palette();
+        cavegirl_palette.set_grayscale_intensity(1);
+
+        while(!bn::keypad::start_pressed())
+        {
+            bn::fixed grayscale_intensity = cavegirl_palette.grayscale_intensity();
+
+            if(bn::keypad::left_held())
+            {
+                cavegirl_palette.set_grayscale_intensity(bn::max(grayscale_intensity - 0.01, bn::fixed(0)));
+            }
+            else if(bn::keypad::right_held())
+            {
+                cavegirl_palette.set_grayscale_intensity(bn::min(grayscale_intensity + 0.01, bn::fixed(1)));
+            }
+
+            bn::core::update();
+        }
+    }
+
+    void palette_grayscale_actions_scene()
+    {
+        bn::regular_bg_ptr village_bg = bn::regular_bg_items::village.create_bg(0, 0);
+        bn::bg_palette_ptr village_palette = village_bg.palette();
+        bn::bg_palette_grayscale_loop_action grayscale_action(village_palette, 120, 1);
+
+        while(!bn::keypad::start_pressed())
+        {
+            grayscale_action.update();
+            bn::core::update();
+        }
+    }
 }
 
 int main()
@@ -813,6 +882,18 @@ int main()
         bn::core::update();
 
         palette_swap_scene();
+        bn::core::update();
+
+        inverted_palette_scene();
+        bn::core::update();
+
+        inverted_palette_actions_scene();
+        bn::core::update();
+
+        palette_grayscale_scene();
+        bn::core::update();
+
+        palette_grayscale_actions_scene();
         bn::core::update();
     }
 }
